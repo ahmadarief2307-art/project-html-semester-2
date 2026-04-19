@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tefa Bakery & Coffee – Produksi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-bg: #3b1414;
+      --sidebar-active: #2a0e0e;
+      --sidebar-hover: rgba(255,255,255,0.07);
+      --sidebar-text: #e8d5c4;
+      --sidebar-icon: #c4a882;
+      --accent-brown: #c49a6c;
+      --accent-btn: #b5865a;
+      --page-bg: #f5f0eb;
+      --card-bg: #ffffff;
+      --border: #e5ddd5;
+      --text-main: #2c1a0e;
+      --text-sub: #8a7060;
+      --text-muted: #b0a090;
+      --badge-orange: #e8760a;
+      --badge-orange-bg: #fde8cc;
+      --badge-gray: #8a7a6a;
+      --badge-gray-bg: #ede8e0;
+      --badge-green: #3a9c4e;
+      --badge-green-bg: #d4f0d8;
+      --input-bg: #f9f5f0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--page-bg);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 210px;
+      min-width: 210px;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 0 20px;
+    }
+
+    .sidebar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      line-height: 1.35;
+      padding: 0 18px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--sidebar-text);
+      cursor: pointer;
+      border-radius: 0;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: var(--sidebar-hover); }
+    .nav-item.active {
+      background: #f5ead8;
+      color: #3b1414;
+      border-left: none;
+      font-weight: 700;
+      margin: 0 10px;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .nav-item.active .icon { opacity: 1; color: #3b1414; }
+    .nav-item .icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logout {
+      padding: 12px 18px;
+    }
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #3b1414;
+      cursor: pointer;
+      background: #f5ead8;
+      border: 1px solid #e0c9a8;
+      border-radius: 6px;
+      padding: 8px 14px;
+      width: 100%;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .logout-btn:hover { background: #ecdfc8; }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px 10px;
+      background: var(--page-bg);
+    }
+    .topbar h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .topbar-right .bell-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-sub);
+      padding: 4px;
+    }
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px 6px 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      background: var(--sidebar-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-avatar svg { color: #fff; }
+
+    /* Content area */
+    .content-area {
+      display: flex;
+      gap: 0;
+      flex: 1;
+      overflow: hidden;
+      padding: 4px 28px 20px;
+    }
+
+    /* ── CENTER PANEL ── */
+    .center-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+    .btn-input {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--accent-btn);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-input:hover { background: #a37650; }
+
+    /* Filter Row */
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .search-input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--input-bg);
+      font-size: 13px;
+      color: var(--text-main);
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+    .date-filter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--text-sub);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .date-filter svg { color: var(--text-muted); }
+
+    /* Table */
+    .table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr {
+      background: #f9f5f0;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th {
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-align: center;
+      border-right: 1px solid #e8e0d8;
+    }
+    thead th:last-child { border-right: none; }
+    tbody tr {
+      border-bottom: 1px solid #e8e0d8;
+      transition: background 0.12s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fdfaf7; }
+    tbody td {
+      padding: 11px 14px;
+      font-size: 13.5px;
+      color: var(--text-main);
+      border-right: 1px solid #e8e0d8;
+      text-align: center;
+    }
+    tbody td:last-child { border-right: none; }
+    td.no { color: var(--text-sub); font-weight: 500; }
+    td.bold { font-weight: 600; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .badge-orange {
+      background: var(--badge-orange);
+      color: #fff;
+      line-height: 1.3;
+    }
+    .badge-gray {
+      background: var(--badge-gray-bg);
+      color: var(--badge-gray);
+    }
+    .badge-green {
+      background: var(--badge-green);
+      color: #fff;
+    }
+
+    /* Aksi */
+    .aksi-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .aksi-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      min-width: 32px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f5f0eb;
+      padding: 0 8px;
+    }
+    .btn-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f5f0eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .btn-icon:hover { background: #ebe5de; }
+    .btn-icon.check {
+      background: #3b1414;
+      border-color: #3b1414;
+    }
+    .btn-icon.check svg { color: #fff; }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px 14px;
+      background: #fff;
+      border-top: 1px solid var(--border);
+    }
+    .page-info { font-size: 12.5px; color: var(--text-muted); }
+    .page-controls { display: flex; align-items: center; gap: 5px; }
+    .page-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f9f5f0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sub);
+      transition: all 0.12s;
+    }
+    .page-btn:hover { background: #ede8e0; }
+    .page-btn.active { background: var(--sidebar-bg); color: #fff; border-color: var(--sidebar-bg); }
+    .page-nav {
+      padding: 0 12px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f9f5f0;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: var(--text-sub);
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      width: 220px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .activity-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .activity-header {
+      padding: 14px 16px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .activity-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 8px 16px 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: background 0.12s;
+      border-bottom: 1px solid #f5f0eb;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: #fdfaf7; }
+    .act-time {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      min-width: 36px;
+      line-height: 1.4;
+    }
+    .act-content { flex: 1; }
+    .act-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+    .act-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+    .act-arrow {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.4;
+      align-self: center;
+    }
+
+    .activity-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-lihat {
+      width: 100%;
+      background: var(--accent-btn);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-lihat:hover { background: #a37650; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d5ccc4; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">Tefa Bakery<br>&amp; Coffee</div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Dashboard
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+      Order
+    </a>
+    <a class="nav-item active" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
+      </svg>
+      Produksi
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+      </svg>
+      Inventory
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+      </svg>
+      Keuangan
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      User
+    </a>
+  </nav>
+
+  <div class="sidebar-logout">
+    <button class="logout-btn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+      </svg>
+      Log Out
+    </button>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <h1>Produksi</h1>
+    <div class="topbar-right">
+      <button class="bell-btn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+        </svg>
+      </button>
+      <div class="user-chip">
+        <div class="user-avatar">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        Pak Dwiki
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content-area">
+
+    <!-- Center Panel -->
+    <div class="center-panel">
+
+      <div class="section-header">
+        <span class="section-title">Jadwal Produksi</span>
+        <button class="btn-input">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Input Data
+        </button>
+      </div>
+
+      <div class="filter-row">
+        <div class="search-wrap">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input class="search-input" type="text" placeholder="Cari produk..." />
+        </div>
+        <div class="date-filter">
+          Hari Ini: 17 Maret 2026
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Produk</th>
+              <th>Tanggal</th>
+              <th><b>Jumlah</b></th>
+              <th>Proses</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="no">01</td>
+              <td class="bold">Roti Kering</td>
+              <td>16 Maret 2026</td>
+              <td>35</td>
+              <td><span class="badge badge-orange">Sedang<br>Diproses</span></td>
+              <td>
+                <div class="aksi-wrap">
+                  <span class="aksi-num">30</span>
+                  <button class="btn-icon check">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="no">02</td>
+              <td class="bold">Roti Sisir</td>
+              <td>17 Maret 2026</td>
+              <td>150</td>
+              <td><span class="badge badge-gray">Terjadwal</span></td>
+              <td>
+                <div class="aksi-wrap">
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="no">03</td>
+              <td class="bold">Roti Coklat</td>
+              <td>17 Maret 2026</td>
+              <td>100</td>
+              <td><span class="badge badge-gray">Terjadwal</span></td>
+              <td>
+                <div class="aksi-wrap">
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="no">04</td>
+              <td class="bold">Roti Pisang</td>
+              <td>17 Maret 2026</td>
+              <td>20</td>
+              <td><span class="badge badge-green">Selesai</span></td>
+              <td>
+                <div class="aksi-wrap">
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="no">05</td>
+              <td class="bold">Roti Kacang</td>
+              <td>17 Maret 2026</td>
+              <td>10</td>
+              <td><span class="badge badge-green">Selesai</span></td>
+              <td>
+                <div class="aksi-wrap">
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="btn-icon">
+                    <svg width="13" height="13" fill="none" stroke="#7a6a5a" stroke-width="2" viewBox="0 0 24 24">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <span class="page-info">Menampilkan 1 sampai 5 dari 20</span>
+          <div class="page-controls">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-nav">Sebelumnya</button>
+            <button class="page-nav">Berikutnya</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="activity-card">
+        <div class="activity-header">Aktivitas Terbaru</div>
+        <div class="activity-body">
+
+          <div class="activity-date">17 Maret 2026</div>
+          <div class="activity-item">
+            <span class="act-time">09:00</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diproses 3 Produk</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+          <div class="activity-item">
+            <span class="act-time">10:00</span>
+            <div class="act-content">
+              <div class="act-title">Produksi Selesai</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+          <div class="activity-item">
+            <span class="act-time">10:15</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diproses 10 Produk</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+
+          <div class="activity-date">17 Maret 2026</div>
+          <div class="activity-item">
+            <span class="act-time">11:00</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diproses 10 Produk</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+          <div class="activity-item">
+            <span class="act-time">11:05</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diterima</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+
+          <div class="activity-date">17 Maret 2026</div>
+          <div class="activity-item">
+            <span class="act-time">12:30</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diproses 10 Produk</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+          <div class="activity-item">
+            <span class="act-time">12:40</span>
+            <div class="act-content">
+              <div class="act-title">Pesanan Baru</div>
+              <div class="act-sub">Diterima</div>
+            </div>
+            <span class="act-arrow">›</span>
+          </div>
+
+        </div>
+        <div class="activity-footer">
+          <button class="btn-lihat">Lihat Semua</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /main -->
+
+</body>
+</html>
